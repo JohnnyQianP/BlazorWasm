@@ -1,7 +1,35 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@inject IWebAssemblyHostEnvironment HostEnvironment
 
 <h1>Hello, world!</h1>
-
-Welcome to your new app.
+<p>Environment: @HostEnvironment.Environment</p>
+@Shared.MainLayout.SayHello Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<TableTemplate Items="pets" Context="pet">
+    <TableHeader>
+        <th>ID</th>
+        <th>Name</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@pet.PetId</td>
+        <td>@pet.Name</td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    private List<Pet> pets = new List<Pet>()
+    {
+            new Pet { PetId = 2, Name = "Mr. Bigglesworth" },
+            new Pet { PetId = 4, Name = "Salem Saberhagen" },
+            new Pet { PetId = 7, Name = "K-9" }
+        };
+
+    private class Pet
+    {
+        public int PetId { get; set; }
+        public string Name { get; set; }
+    }
+}

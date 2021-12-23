@@ -5,6 +5,14 @@
 @inject NavigationManager NavigationManager
 @implements IAsyncDisposable
 <div class="form-group">
+    @*<Inner Root="@Root"></Inner>*@
+    <CascadingValue Value="Root">
+        <Inner></Inner>
+    </CascadingValue>
+    
+</div>
+
+<div class="form-group">
     <label>
         User:
         <input @bind="userInput" />
@@ -25,6 +33,8 @@
 </ul>
 <hr>
 @code {
+    private string Root { get; set; }
+
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
     private string userInput;
@@ -37,6 +47,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Root = "传给后代的值";
         hubConnection = new HubConnectionBuilder()
             .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
             .Build();

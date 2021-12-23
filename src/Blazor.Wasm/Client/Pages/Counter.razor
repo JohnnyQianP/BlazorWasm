@@ -1,16 +1,62 @@
 ﻿@page "/counter"
+@inject IJSRuntime JsRuntime
+@implements IDisposable
 
 <h1>Counter</h1>
-
 <p>Current count: @currentCount</p>
+<p>Call Js from dotnet2's result: @result</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="Calljsthenfromdotnet">Call Js from dotnet</button>
+<button class="btn btn-primary" @onclick="Calljsthenfromdotnet2">Call Js from dotnet2</button>
 
 @code {
+    [CascadingParameter]
+    public Error Error { get; set; }
+
     private int currentCount = 0;
+    private DotNetObjectReference<Counter> objRef;
+
+    private string result { get; set; }
 
     private void IncrementCount()
     {
         currentCount++;
+        if (currentCount > 3)
+        {
+            JsRuntime.InvokeVoidAsync("diyfunction.alertMsg", "当前值超过：3");
+        }
+
+        if (currentCount > 10)
+        {
+            //Error.ProcessError(new Exception("用于抛出异常"));
+        }
+    }
+
+    private void Calljsthenfromdotnet()
+    {
+        JsRuntime.InvokeVoidAsync("diyfunction.calldotnetfun");
+    }
+    private async Task Calljsthenfromdotnet2()
+    {
+        objRef = DotNetObjectReference.Create(this);
+        result = await JsRuntime.InvokeAsync<string>("diyfunction.calldotnetfun2", objRef);
+    }
+
+    [JSInvokable("FromDotnetFunAsync")]
+    public static async Task<string> FromDotnetFunAsync()
+    {
+        return await Task.FromResult("from dotnet function");
+    }
+
+    [JSInvokable]
+    public string FromDotnetFun2()
+    {
+        return "from dotnet function2";
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
     }
 }

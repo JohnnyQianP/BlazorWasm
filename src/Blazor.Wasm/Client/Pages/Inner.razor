@@ -1,0 +1,18 @@
+﻿<p>孩子component：@Root</p>
+<Innersinner></Innersinner>
+@code {
+    //[Parameter]
+    //public string Root { get; set; }
+    [CascadingParameter]
+    public string Root { get; set; }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<string>(nameof(Root), out var value))
+        {
+            var xx = value;
+        }
+
+        await base.SetParametersAsync(parameters);
+    }
+}
