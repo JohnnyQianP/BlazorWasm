@@ -6,9 +6,10 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["src/Blazor.Wasm/Server/Blazor.Wasm.Server.csproj", "src/Blazor.Wasm/Server/"]
-COPY ["src/Blazor.Wasm/Client/Blazor.Wasm.Client.csproj", "src/Blazor.Wasm/Client/"]
-COPY ["src/Blazor.Wasm/Shared/Blazor.Wasm.Shared.csproj", "src/Blazor.Wasm/Shared/"]
+COPY ["src/Blazor.Wasm", "src/Blazor.Wasm"]
+#COPY ["src/Blazor.Wasm/Server/Blazor.Wasm.Server.csproj", "src/Blazor.Wasm/Server/"]
+#COPY ["src/Blazor.Wasm/Client/Blazor.Wasm.Client.csproj", "src/Blazor.Wasm/Client/"]
+#COPY ["src/Blazor.Wasm/Shared/Blazor.Wasm.Shared.csproj", "src/Blazor.Wasm/Shared/"]
 RUN dotnet restore "src/Blazor.Wasm/Server/Blazor.Wasm.Server.csproj"
 COPY . .
 WORKDIR "/src/src/Blazor.Wasm/Server"
